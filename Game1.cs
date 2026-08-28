@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
+using System;
 namespace _1;
 
 public class Game1 : Game
@@ -9,6 +9,7 @@ public class Game1 : Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
     private Player player;
+    private Checkpoint checkpoint;
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -19,7 +20,13 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
+        Player.squareSize = 100;
+        _graphics.PreferredBackBufferWidth  = 800;
+        _graphics.PreferredBackBufferHeight = 500;
+        _graphics.ApplyChanges();
         player = new Player();
+        checkpoint = new Checkpoint();
+        checkpoint.Init();
         base.Initialize();
     }
     
@@ -27,6 +34,8 @@ public class Game1 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         player.LoadContent(GraphicsDevice);
+        checkpoint.LoadContent(GraphicsDevice);
+        Console.WriteLine(_graphics.PreferredBackBufferHeight);
         // TODO: use this.Content to load your game content here
     }
 
@@ -37,16 +46,24 @@ public class Game1 : Game
 
         // TODO: Add your update logic here
         player.Update();
+        if(checkpoint.isCollision == false)
+        {   
+            checkpoint.Update(player.Position);
+        }
         base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
+        GraphicsDevice.Clear(Color.NavajoWhite);
 
         // TODO: Add your drawing code here
         _spriteBatch.Begin();
         player.Draw(_spriteBatch);
+        if(checkpoint.isCollision == false)
+        {
+            checkpoint.Draw(_spriteBatch);            
+        }
         _spriteBatch.End();
         base.Draw(gameTime);
     }

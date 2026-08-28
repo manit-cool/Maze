@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 public class Player
 {
-    public Vector2 Position { get; set; } = new Vector2(50, 50); // for this guy, there's no accessing the 
+    public Vector2 Position { get; set; } = new Vector2(0, 0); // for this guy, there's no accessing the 
     // x and y values, to my knowledge, as if we try to do Position.X = Position.x += 1;
     // it will error out, since it's really Position.Vector2, and I'm *pretty* sure you can't add .X
     // to the end of that, (it bugged out for me 🤷). Okay so I've been proven wrong, you can access the x
@@ -13,14 +13,18 @@ public class Player
     private KeyboardState prevKeyboardState; // This is for just pressed!
     //Time to draw the square, which is lwk harder than making a sprite. 😭
     private Texture2D squareTexture;
+    public static int squareSize = 50; // this is the size of the square, and it can be changed to any value
     public void LoadContent(GraphicsDevice graphicsDevice)
     {
         prevKeyboardState = Keyboard.GetState();
         squareTexture = new Texture2D(graphicsDevice, 1, 1);
-        squareTexture.SetData(new[]{Color.White}); // always give your texture a color!
+        squareTexture.SetData(new[]{Color.White}); // always give your texture a color! 
         // although, technically it's just a tint-
         // so the colors overlap in the draw over the final color;)
         // try making the "color" blue! you'll get a blackish color lol (i was expecting purple-)
+        // btw it's an array of colors because each pixel has it's own color!
+        // but since ours is a 1x1 pixel, we only need one color! (the array is just for the sake of the method) --> the method
+        // needs it to work :D
     }
     public void Update() // remember to call this a method and not a class lmao, cause i did it the first 
     // time
@@ -29,46 +33,46 @@ public class Player
     }
     public void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Draw(squareTexture, new Rectangle((int)Position.X, (int)Position.Y, 50, 50), Color.Red);
+        spriteBatch.Draw(squareTexture, new Rectangle((int)Position.X, (int)Position.Y, squareSize, squareSize), Color.Green);
         //I keep casting the values like int(bleh) when it's meant to be
         // (int)bleh😔
     }
     public void UpdateInput()
     {
         currentKeyboardState = Keyboard.GetState();
+        
         if(currentKeyboardState.IsKeyDown(Keys.W))
         {
-            if (prevKeyboardState.IsKeyUp(Keys.W))
+            if (prevKeyboardState.IsKeyUp(Keys.W) && Position.Y > 0)
             {
-                Position = new Vector2(Position.X, Position.Y - 50); // can't change it's values via +/-/*//   
+                Position = new Vector2(Position.X, Position.Y - squareSize); // can't change it's values via +/-/*//   
             }
             // but you can make a new vector2 with the new values and assign it to Position 🥳
         }
         if(currentKeyboardState.IsKeyDown(Keys.S))
         {
-            if (prevKeyboardState.IsKeyUp(Keys.S))
+            if (prevKeyboardState.IsKeyUp(Keys.S) && Position.Y < 500-squareSize) // for some reason, 480 didn't work, so I just
+            // rounded up to 500 :D
             {
-                Position = new Vector2(Position.X, Position.Y + 50);
+                Position = new Vector2(Position.X, Position.Y + squareSize);
             }
         }
         if(currentKeyboardState.IsKeyDown(Keys.A))
         {
-            if (prevKeyboardState.IsKeyUp(Keys.A))
+            if (prevKeyboardState.IsKeyUp(Keys.A) && Position.X > 0)
             {
-                Position = new Vector2(Position.X - 50, Position.Y);
+                Position = new Vector2(Position.X - squareSize, Position.Y);
             }
         }
         if(currentKeyboardState.IsKeyDown(Keys.D))
         {
-            if (prevKeyboardState.IsKeyUp(Keys.D))
+            if (prevKeyboardState.IsKeyUp(Keys.D) && Position.X < 800-squareSize) // 800 is the width of the screen, so we don't want to go past that
             {
-                Position = new Vector2(Position.X + 50, Position.Y);
+                Position = new Vector2(Position.X + squareSize, Position.Y);
             }
         }
-
         prevKeyboardState = currentKeyboardState;
         // now the current state was the previous state
         // so we make the previous state that :D
-    
     }
 }
