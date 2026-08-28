@@ -8,7 +8,7 @@ public class Game1 : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-
+    private Player player;
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -19,14 +19,14 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
-
+        player = new Player();
         base.Initialize();
     }
     
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-
+        player.LoadContent(GraphicsDevice);
         // TODO: use this.Content to load your game content here
     }
 
@@ -36,7 +36,7 @@ public class Game1 : Game
             Exit();
 
         // TODO: Add your update logic here
-
+        player.Update();
         base.Update(gameTime);
     }
 
@@ -45,7 +45,9 @@ public class Game1 : Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
         // TODO: Add your drawing code here
-
+        _spriteBatch.Begin();
+        player.Draw(_spriteBatch);
+        _spriteBatch.End();
         base.Draw(gameTime);
     }
 }
