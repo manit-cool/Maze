@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 namespace _1;
 
 public class Game1 : Game
@@ -10,6 +11,43 @@ public class Game1 : Game
     private SpriteBatch _spriteBatch;
     private Player player;
     private Checkpoint checkpoint;
+    List<Tiles> tiles = new List<Tiles>();
+    private int[,] mapGridY =
+    //Each value represents a y multiplier! I would preferabbly have a set of {} per each multiplier :D
+    // This is really inefficient, but i didn't know how else to do it,
+    // so it's stuck that way, for now:) --> might be different for other project:)
+    {
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+        {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
+        {3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3},
+        {4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4},
+        {5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5},
+        {6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6},
+        {7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7},
+        {8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8},
+        {9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9}
+    };
+
+    private int[,] mapGridX =
+    // 0-15 are tiles
+    // 99 is blank
+    // 20 is player
+    // 21 is apple
+    // 22 checkpoints
+    // 67 enemies
+    {
+        {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15},
+        {0,20,2,99,99,99,6,99,99,99,99,99,99,99,99,15},
+        {0,99,2,99,4,99,6,99,8,99,99,99,99,99,99,15},
+        {0,99,2,99,4,99,99,99,8,99,99,99,99,99,99,15},
+        {0,99,2,99,4,99,6,99,8,99,99,99,99,99,99,15},
+        {0,99,2,99,4,99,6,99,8,99,99,99,99,99,99,15},
+        {0,99,2,99,4,99,6,99,8,99,99,99,99,99,99,15},
+        {0,99,2,99,4,99,6,99,8,99,99,99,99,22,99,15},
+        {0,99,99,99,4,99,99,8,99,99,99,99,99,99,99,15},
+        {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}
+    };
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -20,7 +58,7 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
-        Player.squareSize = 100;
+        Player.squareSize = 50;
         _graphics.PreferredBackBufferWidth  = 800;
         _graphics.PreferredBackBufferHeight = 500;
         _graphics.ApplyChanges();
@@ -35,21 +73,45 @@ public class Game1 : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         player.LoadContent(GraphicsDevice);
         checkpoint.LoadContent(GraphicsDevice);
-        Console.WriteLine(_graphics.PreferredBackBufferHeight);
-        // TODO: use this.Content to load your game content here
+
+        for(int y = 0; y < mapGridY.GetLength(0); y++)
+        {
+            for(int x = 0; x < mapGridX.GetLength(1); x++)
+            {
+                if(mapGridX[y,x] >= 0 && mapGridX[y,x] <= 15)
+                {
+                    Tiles tile = new Tiles();
+                    tile.Position = new Vector2(mapGridX[y, x]*Player.squareSize, mapGridY[y, x]*Player.squareSize);
+                    tiles.Add(tile);
+                }
+                else if(mapGridX[y,x] == 20)
+                {
+                    player.Position = new Vector2(x * Player.squareSize, y * Player.squareSize);
+                }
+                else if(mapGridX[y,x] == 22)
+                {
+                    checkpoint.Position = new Vector2(x * Player.squareSize, y * Player.squareSize);
+                }
+            }
+        }
+        foreach(var tile in tiles)
+        {
+            tile.LoadContent(GraphicsDevice);
+        }
     }
 
     protected override void Update(GameTime gameTime)
-    {
+    {  
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
         // TODO: Add your update logic here
-        player.Update();
+        player.Update(tiles);
         if(checkpoint.isCollision == false)
         {   
             checkpoint.Update(player.Position);
         }
+
         base.Update(gameTime);
     }
 
@@ -59,11 +121,17 @@ public class Game1 : Game
 
         // TODO: Add your drawing code here
         _spriteBatch.Begin();
-        player.Draw(_spriteBatch);
+
         if(checkpoint.isCollision == false)
         {
             checkpoint.Draw(_spriteBatch);            
         }
+        foreach(var tile in tiles)
+        {
+            tile.Draw(_spriteBatch);
+        }
+        player.Draw(_spriteBatch);
+
         _spriteBatch.End();
         base.Draw(gameTime);
     }

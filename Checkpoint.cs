@@ -24,14 +24,13 @@ public class Checkpoint
     // i don't know how this is useful rn. It might be helpful with speed, but this sure will be helpful with the apples and the
     // score keeping :D
     // readonly => read only, you can't change its value --> prettyyy straightforward lmao (11 lines of comment 😭 )
-    private Vector2 Position {get; set;} = new Vector2(rand.Next(0,800/Player.squareSize) * Player.squareSize, rand.Next(0, 500/Player.squareSize) * Player.squareSize);
+    public Vector2 Position {get; set;}
     private Texture2D checkpointTexture;
     private Rectangle playerRect;
     private Rectangle checkRect;
     public bool isCollision;
     public void Init() // im sorry, yes i just made another function just to define 2 rects
     {
-        checkRect = new Rectangle((int)Position.X, (int)Position.Y, Player.squareSize, Player.squareSize);
         isCollision = false;
     }
     public void LoadContent(GraphicsDevice graphics)
@@ -41,6 +40,7 @@ public class Checkpoint
     }
     public void Update(Vector2 playerPosition)
     {
+        checkRect = new Rectangle((int)Position.X, (int)Position.Y, Player.squareSize, Player.squareSize);
         playerRect = new Rectangle((int)playerPosition.X, (int)playerPosition.Y, Player.squareSize, Player.squareSize);
         Collisions();
     }
