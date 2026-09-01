@@ -12,6 +12,9 @@ public class Game1 : Game
     private Player player;
     private Checkpoint checkpoint;
     List<Tiles> tiles = new List<Tiles>();
+    List<Apple> apples = new List<Apple>();
+    private int appleCount;
+
     private int[,] mapGridY =
     //Each value represents a y multiplier! I would preferabbly have a set of {} per each multiplier :D
     // This is really inefficient, but i didn't know how else to do it,
@@ -42,7 +45,7 @@ public class Game1 : Game
         {0,99,2,99,4,99,6,99,8,99,99,99,99,99,99,15},
         {0,99,2,99,4,99,99,99,8,99,99,99,99,99,99,15},
         {0,99,2,99,4,99,6,99,8,99,99,99,99,99,99,15},
-        {0,99,2,99,4,99,6,99,8,99,99,99,99,99,99,15},
+        {0,99,2,99,4,99,6,99,8,99,99,99,99,99,21,15},
         {0,99,2,99,4,99,6,99,8,99,99,99,99,99,99,15},
         {0,99,2,99,4,99,6,99,8,99,99,99,99,22,99,15},
         {0,99,99,99,4,99,99,8,99,99,99,99,99,99,99,15},
@@ -59,12 +62,29 @@ public class Game1 : Game
     {
         // TODO: Add your initialization logic here
         Player.squareSize = 50;
+        appleCount = 0;
         _graphics.PreferredBackBufferWidth  = 800;
         _graphics.PreferredBackBufferHeight = 500;
         _graphics.ApplyChanges();
         player = new Player();
         checkpoint = new Checkpoint();
         checkpoint.Init();
+        for(int y = 0; y < mapGridY.GetLength(0); y++)
+        {
+            for(int x = 0; x < mapGridX.GetLength(1); x++)
+            {
+                if(mapGridX[y,x] == 21)
+                {
+                    apples.Add(new Apple());
+                    apples[appleCount].Position = new Vector2(x * Player.squareSize, y * Player.squareSize);
+                    appleCount++;
+                }
+            }
+        }
+        foreach(var apple in apples)
+        {
+            apple.Init();
+        }
         base.Initialize();
     }
     
@@ -98,6 +118,10 @@ public class Game1 : Game
         {
             tile.LoadContent(GraphicsDevice);
         }
+        foreach(var apple in apples)
+        {
+            apple.LoadContent(GraphicsDevice);
+        }
     }
 
     protected override void Update(GameTime gameTime)
@@ -111,10 +135,16 @@ public class Game1 : Game
         {   
             checkpoint.Update(player.Position);
         }
-
+        foreach(var apple in apples)
+        {
+            if (apple.isCollision == false)
+            {
+                apple.Update(player.Position);
+            }
+        }
         base.Update(gameTime);
     }
-
+    
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.NavajoWhite);
@@ -131,7 +161,13 @@ public class Game1 : Game
             tile.Draw(_spriteBatch);
         }
         player.Draw(_spriteBatch);
-
+        foreach(var apple in apples)
+        {
+            if(apple.isCollision == false)
+            {
+                apple.Draw(_spriteBatch);
+            }
+        }
         _spriteBatch.End();
         base.Draw(gameTime);
     }

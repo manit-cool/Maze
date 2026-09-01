@@ -29,7 +29,7 @@ public class Checkpoint
     private Rectangle playerRect;
     private Rectangle checkRect;
     public bool isCollision;
-    public void Init() // im sorry, yes i just made another function just to define 2 rects
+    public void Init()
     {
         isCollision = false;
     }
