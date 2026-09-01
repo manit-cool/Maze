@@ -14,7 +14,7 @@ public class Game1 : Game
     List<Tiles> tiles = new List<Tiles>();
     List<Apple> apples = new List<Apple>();
     private int appleCount;
-    
+    private Enemy enemy;
 
     private int[,] mapGridY =
     //Each value represents a y multiplier! I would preferabbly have a set of {} per each multiplier :D
@@ -68,6 +68,7 @@ public class Game1 : Game
         _graphics.PreferredBackBufferHeight = 500;
         _graphics.ApplyChanges();
         player = new Player();
+        enemy = new Enemy();
         checkpoint = new Checkpoint();
         checkpoint.Init();
         for(int y = 0; y < mapGridY.GetLength(0); y++)
@@ -94,7 +95,7 @@ public class Game1 : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         player.LoadContent(GraphicsDevice);
         checkpoint.LoadContent(GraphicsDevice);
-
+        enemy.LoadContent(GraphicsDevice);
         for(int y = 0; y < mapGridY.GetLength(0); y++)
         {
             for(int x = 0; x < mapGridX.GetLength(1); x++)
@@ -143,6 +144,7 @@ public class Game1 : Game
                 apple.Update(player.Position);
             }
         }
+        enemy.Update(player.playerRect, gameTime, tiles);
         base.Update(gameTime);
     }
 
@@ -169,6 +171,7 @@ public class Game1 : Game
                 apple.Draw(_spriteBatch);
             }
         }
+        enemy.Draw(_spriteBatch);
         _spriteBatch.End();
         base.Draw(gameTime);
     }
