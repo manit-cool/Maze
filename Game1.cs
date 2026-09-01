@@ -14,6 +14,7 @@ public class Game1 : Game
     List<Tiles> tiles = new List<Tiles>();
     List<Apple> apples = new List<Apple>();
     private int appleCount;
+    
 
     private int[,] mapGridY =
     //Each value represents a y multiplier! I would preferabbly have a set of {} per each multiplier :D
@@ -144,7 +145,7 @@ public class Game1 : Game
         }
         base.Update(gameTime);
     }
-    
+
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.NavajoWhite);
