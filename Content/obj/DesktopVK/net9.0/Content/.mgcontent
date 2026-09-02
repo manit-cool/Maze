@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Profile>Reach</Profile>
+  <Platform>DesktopVK</Platform>
+  <Config />
+  <SourceFiles>
+    <File>/Users/manitgupta/Coding/Maze/1/Content/Eternity.mp3</File>
+    <File>/Users/manitgupta/Coding/Maze/1/Content/File.spritefont</File>
+  </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File>MyMenuFont</File>
+  </DestFiles>
+</SourceFileCollection>

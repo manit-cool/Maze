@@ -32,12 +32,13 @@ public class Player
         // but since ours is a 1x1 pixel, we only need one color! (the array is just for the sake of the method) --> the method
         // needs it to work :D
     }
-    public void Update(List<Tiles> tiles) // remember to call this a method and not a class lmao, cause i did it the first 
+    public void Update(List<Tiles> tiles, Vector2 startPos, List<Enemy> enemies) // remember to call this a method and not a class lmao, cause i did it the first 
     // time
     {
         playerRect = new Rectangle((int)Position.X, (int)Position.Y, squareSize, squareSize);
-        //TileCollsion(tiles);
+        Restart(startPos, enemies);
         UpdateInput(tiles);
+
 
     }
     public void Draw(SpriteBatch spriteBatch)
@@ -99,17 +100,13 @@ public class Player
         // so we make the previous state that :D
         
     }
-    public void TileCollsion(List<Tiles> tiles)
+    public void Restart(Vector2 startPosition, List<Enemy> enemies)
     {
-        foreach(var tile in tiles)
+        foreach (var enemy in enemies)
         {
-            tileCollision = playerRect.Intersects(tile.tileRect);
-            if(tileCollision)
+            if(playerRect.Intersects(enemy.enemyRect))
             {
-                if(playerRect.Left < tile.tileRect.Right)
-                {
-                    Position = new Vector2(tile.tileRect.Right, (int)Position.Y);
-                }
+                Position = startPosition;
             }
         }
     }

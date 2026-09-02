@@ -1,1 +1,3 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"/Users/manitgupta/Coding/Maze/1/Content/Eternity.mp3","/Users/manitgupta/Coding/Maze/1/Content/bin/DesktopVK/Content/Eternity.xnb","SongProcessor","SongContent",13982951,126,4.307968
+"/Users/manitgupta/Coding/Maze/1/Content/File.spritefont","/Users/manitgupta/Coding/Maze/1/Content/bin/DesktopVK/Content/MyMenuFont.xnb","FontDescriptionProcessor","SpriteFontContent",2008,70682,0.121001

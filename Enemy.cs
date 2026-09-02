@@ -9,7 +9,7 @@ public class Enemy
     // just like in all the other files
     public bool upOrDown; // True = Up, False = Down
     private Texture2D enemyTexture;
-    private Rectangle enemyRect;
+    public Rectangle enemyRect;
     private Rectangle futureRect;
     private double timer;
     private int moveDir;
@@ -19,7 +19,7 @@ public class Enemy
     {
         enemyTexture = new Texture2D(graphicsDevice, 1, 1);
         moveDir = 1;
-        upOrDown = true;
+        upOrDown = false;
         timer = 0;
         enemyTexture.SetData(new[]{Color.White});
     }
@@ -46,31 +46,26 @@ public class Enemy
         {
 
             futureRect = new Rectangle((int)Position.X + Player.squareSize * moveDir,(int) Position.Y, Player.squareSize, Player.squareSize);
-            if(futureRect.Intersects(tileRect) && timer >= 1)
-            {
-                moveDir *= -1;
-            }
         }
         if (upOrDown == true)
         {
             futureRect = new Rectangle((int)Position.X,(int) Position.Y + Player.squareSize * moveDir, Player.squareSize, Player.squareSize);
-            if(futureRect.Intersects(tileRect))
-            {
-                moveDir *= -1;
-            }
+        }
+        if(futureRect.Intersects(tileRect))
+        {
+            moveDir *= -1;
         }
         if (timer>=0.25)
         {
             if(upOrDown == false)
             {
                 Position = new Vector2(Position.X + Player.squareSize * moveDir, Position.Y);
-                timer = 0;
             }
             if(upOrDown == true)
             {
                 Position = new Vector2(Position.X, Position.Y + Player.squareSize * moveDir);
-                timer = 0;
             }
+            timer = 0;
         }
     }
 }   

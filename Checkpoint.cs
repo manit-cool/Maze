@@ -26,9 +26,11 @@ public class Checkpoint
     // readonly => read only, you can't change its value --> prettyyy straightforward lmao (11 lines of comment 😭 )
     public Vector2 Position {get; set;}
     private Texture2D checkpointTexture;
+    private Texture2D endTexture;
     private Rectangle playerRect;
     private Rectangle checkRect;
     public bool isCollision;
+    public bool started;
     public void Init()
     {
         isCollision = false;
@@ -37,6 +39,8 @@ public class Checkpoint
     {
         checkpointTexture = new Texture2D(graphics, 1,1);
         checkpointTexture.SetData(new[]{Color.White});
+        endTexture = new Texture2D(graphics, 1,1);
+        endTexture.SetData(new[]{Color.White});
     }
     public void Update(Vector2 playerPosition)
     {
@@ -47,6 +51,24 @@ public class Checkpoint
     public void Draw(SpriteBatch spriteBatch)
     {
         spriteBatch.Draw(checkpointTexture, checkRect, Color.RoyalBlue);
+    }
+    public void End(SpriteBatch spriteBatch)
+    {
+        spriteBatch.Draw(endTexture, new Rectangle(0, 0, 800, 500), Color.FloralWhite);
+    }
+    public void Start(SpriteBatch spriteBatch)
+    {
+        KeyboardState keyState = Keyboard.GetState();
+
+        if (keyState.IsKeyDown(Keys.Enter))
+        {
+            started = true;
+
+        }        
+        if(started == false)
+        {
+            spriteBatch.Draw(endTexture, new Rectangle(0, 0, 800, 500), Color.FloralWhite);
+        }
     }
     // I think I want to add the collisions for the player and the check point over here cuz, yes ✨
     public void Collisions()
